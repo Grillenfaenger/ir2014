@@ -47,7 +47,15 @@ public class TermDokumentMatrix implements InformationRetrieval {
 		System.out.println("Matrix erstellt, Dauer: "
 				+ (System.currentTimeMillis() - start) + " ms.");
 
-		printMatrix(terms);// optional
+		// printMatrix(terms);
+		
+		/*
+		 * Falls beim Erstellen bzw. Ausgeben der Matrix der Speicher
+		 * volllaeuft, kann man den Speicher, den sich der Prozess nimmt, mit
+		 * der Angabe des Parameters "-Xmx256m" (unter Open Run Dialog,
+		 * Arguments, VM Arguments) erhoehen, dies fuer 256 MB; per default
+		 * nimmt sich jeder Java-Prozess 64 MB.
+		 */
 	}
 
 	/*
