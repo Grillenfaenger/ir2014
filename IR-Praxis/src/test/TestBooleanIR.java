@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestBooleanIR {
@@ -29,19 +30,27 @@ public class TestBooleanIR {
 	@Test
 	public void testCorpus() throws Exception {
 		// Testen, ob Korpus korrekt angelegt wurde:
-		String[] works = corpus.getWorks();
-		System.out.println("Anzahl der Werke: " + works.length);
-		assertTrue("Korpus sollte mehr als 1 Werk enthalten", works.length > 1);
+		List<String> works = corpus.getWorks();
+		System.out.println("Anzahl der Werke: " + works.size());
+		assertTrue("Korpus sollte mehr als 1 Werk enthalten", works.size() > 1);
 	}
 
 	@Test
 	public void testLinearSearch() {
 		// Testen, ob lineare Suche ein Ergebnis liefert:
-		String query = "Brutus";
+		
 		LinearSearch linear = new LinearSearch(corpus);
+
+		String query = "Brutus";
 		Set<Integer> result = linear.search(query);
 		assertTrue("Mindestens ein Treffer erwartet", result.size() >= 1);
-		System.out.println(result);
+		System.out.println("Ergebnis für " + query + ": " + result);
+
+		query = "Brutus Caesar";
+		Set<Integer> result2 = linear.search(query);
+		assertTrue("Ergebnis-Set sollte größer sein als bei einzelnem Term",
+				result2.size() >= result.size());
+		System.out.println("Ergebnis für " + query + ": " + result2);
 	}
 
 	@Test
