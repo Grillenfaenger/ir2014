@@ -6,5 +6,5 @@ h2. Information Retrieval
 table(#tableborders){ border: 2px solid #ccc; border-collapse: collapse; border-spacing: 0; width:100%;}.
 | | *Inhalt* | *Ressourcen* | *Literatur* |
 | "ir1":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir1 | Korpus | "Shakespeare":http://www.gutenberg.org/cache/epub/100/pg100.txt | |
-| "ir2":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir1 | Lineare Suche, Term-Dokument-Matrix | | IIR Kap. 1 |
+| "ir2":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir2 | Lineare Suche, Term-Dokument-Matrix | | IIR Kap. 1 |
 

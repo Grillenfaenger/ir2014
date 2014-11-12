@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Corpus {
 
 	private String text;
-	private String[] works;
+	private List<String> works; // Liste statt Array
 
 	public Corpus(String filename, String delimiter) {
 
@@ -27,10 +27,10 @@ public class Corpus {
 			e.printStackTrace();
 		}
 		text = sb.toString();
-		works = text.split(delimiter);
+		works = Arrays.asList(text.split(delimiter)); // Liste statt Array
 	}
 
-	public String[] getWorks() {
+	public List<String> getWorks() {
 		return works;
 	}
 
