@@ -4,14 +4,18 @@ import static org.junit.Assert.assertTrue;
 import ir1.Corpus;
 import ir2.LinearSearch;
 import ir2.TermDokumentMatrix;
+import ir3.Intersection;
 import ir3.InvertedIndex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -77,18 +81,20 @@ public class TestBooleanIR {
 		System.out.println("Ergebnis für " + query + ": " + result1);
 		assertTrue("Mindestens ein Treffer erwartet", result1.size() >= 1);
 
+		// hier behandeln wir die Terme als ODER-verknüpft:
 		query = "Brutus Caesar";
 		Set<Integer> result2 = matrix.search(query);
 		System.out.println("Ergebnis für " + query + ": " + result2);
 		assertTrue("Ergebnis-Set sollte größer sein als bei einzelnem Term",
 				result2.size() >= result.size());
 
+		// das gleiche nochmal mit UND-Verknüpfung:
 		query = "Brutus Caesar";
 		Set<Integer> result3 = matrix.booleanSearch(query);
 		System.out.println("Ergebnis für " + query + ": " + result3);
 		assertTrue("Ergebnis-Set sollte kleiner sein als bei einzelnem Term",
 				result2.size() >= result.size());
-}
+	}
 
 	@Test
 	public void testIndexSearch() {
@@ -106,8 +112,8 @@ public class TestBooleanIR {
 
 		query = "Brutus Caesar";
 		Set<Integer> result2 = index.search(query);
-		assertTrue("Ergebnis-Set sollte größer sein als bei einzelnem Term",
-				result2.size() >= result.size());
+		assertTrue("Ergebnis-Set sollte kleiner sein als bei einzelnem Term",
+				result2.size() <= result.size());
 		System.out.println("Ergebnis für " + query + ": " + result2);
 	}
 
@@ -132,6 +138,19 @@ public class TestBooleanIR {
 		}
 		System.out.println("# of matches: " + allMatches.size());
 		System.out.println(allMatches.toString());
+	}
+
+	private static final TreeSet<Integer> PL2 = new TreeSet<Integer>(
+			Arrays.asList(2, 4, 6, 8));
+	private static final TreeSet<Integer> PL1 = new TreeSet<Integer>(
+			Arrays.asList(1, 2, 3, 4));
+	private static final List<Integer> EXPECTED = Arrays.asList(2, 4);
+
+	@Test
+	public void intersect() {
+		System.out.println("Intersection-Algorithmus nach Manning et al.");
+		List<Integer> list = new ArrayList<Integer>(Intersection.of(PL1, PL2));
+		Assert.assertEquals(EXPECTED, list);
 	}
 
 }
