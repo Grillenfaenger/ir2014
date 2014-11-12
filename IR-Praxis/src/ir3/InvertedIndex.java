@@ -93,6 +93,7 @@ public class InvertedIndex implements InformationRetrieval {
 	/*
 	 * Ausgabe der Indexterme:
 	 */
+	@SuppressWarnings("unused")
 	private void printSortedIndexTerms(Map<String, SortedSet<Integer>> index) {
 		TreeSet<String> terms = new TreeSet<>(index.keySet());
 		for (String string : terms) {
