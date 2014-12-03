@@ -6,11 +6,13 @@ import ir2.LinearSearch;
 import ir2.TermDokumentMatrix;
 import ir3.Intersection;
 import ir3.InvertedIndex;
+import ir4.PositionalIndex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,14 +86,14 @@ public class TestBooleanIR {
 		// hier behandeln wir die Terme als ODER-verknüpft:
 		query = "Brutus Caesar";
 		Set<Integer> result2 = matrix.search(query);
-		System.out.println("Ergebnis für " + query + ": " + result2);
+		System.out.println("OR-Ergebnis für " + query + ": " + result2);
 		assertTrue("Ergebnis-Set sollte größer sein als bei einzelnem Term",
 				result2.size() >= result.size());
 
 		// das gleiche nochmal mit UND-Verknüpfung:
 		query = "Brutus Caesar";
 		Set<Integer> result3 = matrix.booleanSearch(query);
-		System.out.println("Ergebnis für " + query + ": " + result3);
+		System.out.println("AND-Ergebnis für " + query + ": " + result3);
 		assertTrue("Ergebnis-Set sollte kleiner sein als bei einzelnem Term",
 				result2.size() >= result.size());
 	}
@@ -115,6 +117,43 @@ public class TestBooleanIR {
 		assertTrue("Ergebnis-Set sollte kleiner sein als bei einzelnem Term",
 				result2.size() <= result.size());
 		System.out.println("Ergebnis für " + query + ": " + result2);
+	}
+
+	@Test
+	public void testPositionalIndex() {
+
+		System.out.println();
+		System.out.println("Positional Index:");
+		System.out.println("-------------------");
+		PositionalIndex posIndex = new PositionalIndex(corpus);
+
+		query = "Brutus";
+		Set<Integer> result = posIndex.search(query);
+		System.out.println("Ergebnis für " + query + ": " + result);
+		assertTrue("ergebnis sollte nicht leer sein!", result.size() > 0);
+
+		query = "Brutus Caesar";
+		result = posIndex.search(query);// einfache Suche (wie bisher)
+		System.out.println("Ergebnis für " + query + ": " + result);
+		assertTrue("ergebnis sollte nicht leer sein!", result.size() > 0);
+
+		SortedMap<Integer, List<Integer>> posResult;
+		posResult = posIndex.proximitySearch(query, 1);// nur konsekutive Terme
+		System.out.println("Ergebnis für " + query + ": " + posResult.keySet());
+		assertTrue("ergebnis sollte nicht leer sein!", posResult.size() > 0);
+		// optionale Ausgabe der Fundstellen:
+		// posIndex.printSnippets(query, posResult, 1);
+
+		query = "to be or not to be";
+		result = posIndex.search(query);// einfache Suche (wie bisher)
+		System.out.println("Ergebnis für " + query + ": " + result);
+		assertTrue("ergebnis sollte nicht leer sein!", result.size() > 0);
+
+		posResult = posIndex.proximitySearch(query, 1);// nur konsekutive Terme
+		System.out.println("Ergebnis für " + query + ": " + posResult.keySet());
+		assertTrue("ergebnis sollte nicht leer sein!", posResult.size() > 0);
+		// optionale Ausgabe der Fundstellen:
+		// posIndex.printSnippets(query, posResult, 1);
 	}
 
 	/*
