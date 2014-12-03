@@ -138,11 +138,11 @@ public class TestBooleanIR {
 		assertTrue("ergebnis sollte nicht leer sein!", result.size() > 0);
 
 		SortedMap<Integer, List<Integer>> posResult;
-		posResult = posIndex.proximitySearch(query, 1);// nur konsekutive Terme
-		System.out.println("Ergebnis für " + query + ": " + posResult.keySet());
+		posResult = posIndex.proximitySearch(query, 2);// nur konsekutive Terme
 		assertTrue("ergebnis sollte nicht leer sein!", posResult.size() > 0);
-		// optionale Ausgabe der Fundstellen:
-		// posIndex.printSnippets(query, posResult, 1);
+		System.out.println("Ergebnis für " + query + ": " + posResult);
+		// alternativ mit Ausgabe der Fundstellen:
+		posIndex.printSnippets(query, posResult, 2);
 
 		query = "to be or not to be";
 		result = posIndex.search(query);// einfache Suche (wie bisher)
@@ -150,10 +150,10 @@ public class TestBooleanIR {
 		assertTrue("ergebnis sollte nicht leer sein!", result.size() > 0);
 
 		posResult = posIndex.proximitySearch(query, 1);// nur konsekutive Terme
-		System.out.println("Ergebnis für " + query + ": " + posResult.keySet());
 		assertTrue("ergebnis sollte nicht leer sein!", posResult.size() > 0);
-		// optionale Ausgabe der Fundstellen:
-		// posIndex.printSnippets(query, posResult, 1);
+		System.out.println("Ergebnis für " + query + ": " + posResult);
+		// alternativ mit Ausgabe der Fundstellen:
+		posIndex.printSnippets(query, posResult, 1);
 	}
 
 	/*
