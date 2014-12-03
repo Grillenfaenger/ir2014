@@ -83,11 +83,43 @@ public class Intersection {
 		SortedMap<Integer, List<Integer>> answer = new TreeMap<>();
 		while (p1 != null && p2 != null) {
 			if (p1 == p2) {
+				// answer.add(p1); // wird ersetzt durch:
 
-				// answer.add(p1); // wird ersetzt:
-				
-				//TODO: Hier Pos-Listen abgleichen ...
-
+				List<Integer> l = new ArrayList<>();
+				Iterator<Integer> posIt1 = pl1.get(p1).iterator();
+				Iterator<Integer> posIt2 = pl2.get(p2).iterator();
+				Integer pp1 = nextOrNull(posIt1);
+				Integer pp2 = nextOrNull(posIt2);
+				while (pp1 != null) {
+					while (pp2 != null) {
+						if (Math.abs(pp1 - pp2) <= k) {
+							l.add(pp2);
+						} else if (pp2 > pp1) {
+							break;
+						}
+						pp2 = nextOrNull(posIt2);
+					}
+					while (l.size() != 0 && Math.abs(l.get(0) - pp1) > k) {
+						l.remove(0);
+					}
+					for (Integer p : l) {
+						List<Integer> posList = answer.get(p1);
+						if (posList == null) {
+							posList = new ArrayList<Integer>();
+						}
+						/*
+						 * abweichend zum Seminar hier zusätzlich noch eine
+						 * contains-Abfrage, damit Positionen nur einmal im
+						 * Ergebnis landen (die Verwendung von Sets würde einen
+						 * größeren Umbau erfordern).
+						 */
+						if (!posList.contains(p)) {
+							posList.add(p);
+							answer.put(p1, posList);
+						}
+					}
+					pp1 = nextOrNull(posIt1);
+				}
 				// der Rest des Algorithmus bleibt wie bisher:
 				p1 = nextOrNull(it1);
 				p2 = nextOrNull(it2);
