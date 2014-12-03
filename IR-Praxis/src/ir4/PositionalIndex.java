@@ -23,12 +23,14 @@ public class PositionalIndex implements InformationRetrieval {
 
 	// PosIndex: Zu jedem Term alle Werke inkl. der Position des Terms
 	private Map<String, SortedMap<Integer, List<Integer>>> posIndex;
-	// eine Instanz des Preprocessors
 	private static final Preprocessor PREPROCESSOR = new Preprocessor();
+	// Zugriff auf tokens & Titel (siehe Methode printSnippets()):
+	private Corpus corpus;
 
 	public PositionalIndex(Corpus corpus) {
 		long start = System.currentTimeMillis();
 		posIndex = index(corpus);
+		this.corpus = corpus;// Korpus für Ergebnisaufbereitung
 		System.out.println("Index erstellt, Dauer: "
 				+ (System.currentTimeMillis() - start) + " ms.");
 	}
@@ -112,7 +114,6 @@ public class PositionalIndex implements InformationRetrieval {
 	public SortedMap<Integer, List<Integer>> proximitySearch(String query,
 			int maxDistance) {
 		long start = System.currentTimeMillis();
-		// gleicher Preprocessor wie bei Indexierung!
 		List<String> queries = PREPROCESSOR.tokenize(query);
 		/*
 		 * Statt Postings-Listen hier Postings-Maps der Teilqueries:
@@ -121,9 +122,6 @@ public class PositionalIndex implements InformationRetrieval {
 		for (String q : queries) {
 			SortedMap<Integer, List<Integer>> postingsMap = posIndex.get(q);
 			allPostingsMaps.add(postingsMap);
-			// optionale Zwischenausgabe:
-			// System.out.println(String.format("query: %s \t #hits: %s \t %s",
-			// q, postingsMap.size(), postingsMap.keySet()));
 		}
 		// dann die Maps nach ihrer Länge sortieren:
 		Collections.sort(allPostingsMaps, new Comparator<SortedMap>() {
@@ -137,7 +135,7 @@ public class PositionalIndex implements InformationRetrieval {
 		for (SortedMap<Integer, List<Integer>> postingsMap : allPostingsMaps) {
 			result = Intersection.of(result, postingsMap, maxDistance);
 		}
-		System.out.println("Proximity-Suche: "
+		System.out.println("Proximity-Suche (range " + maxDistance + "): "
 				+ (System.currentTimeMillis() - start) + " ms.");
 		return result;
 	}
@@ -147,9 +145,37 @@ public class PositionalIndex implements InformationRetrieval {
 	 */
 	public void printSnippets(String query,
 			SortedMap<Integer, List<Integer>> result, int maxDistance) {
+		/*
+		 * Da das Ergebnis nur die Position des letzten Teilqueries enthält,
+		 * sollte hier sowohl die Länge des Gesamtqueries als auch der maximale
+		 * Abstand berücksichtigt werden, innerhalb dessen die Terme auftreten
+		 * dürfen, damit alle gesuchten Terme in der Ausgabe sichtbar sind.
+		 */
+		int queryLength = PREPROCESSOR.tokenize(query).size();
+		int range = maxDistance + queryLength;
 
-		// TODO: Ideen?
-
+		for (Integer docId : result.keySet()) {
+			// Werk als Tokenlist für Rekonstruktion der Fundstelle:
+			String work = corpus.getWorks().get(docId);
+			List<String> tokens = PREPROCESSOR.tokenize(work);
+			// Die einzelnen Fundstellen:
+			List<Integer> positions = result.get(docId);
+			// Werktitel = erste Zeile des Werks
+			String title = (work.trim().substring(0, work.trim().indexOf("\n")));
+			System.out.println(String.format(
+					"'%s' %s-mal gefunden in Werk #%s (%s):", query,
+					positions.size(), docId, title));
+			for (Integer pos : positions) {
+				// Textanfang und -ende abfangen (Math.max bzw. Math.min)
+				int start = Math.max(0, pos - range);
+				int end = Math.min(tokens.size(), pos + range);
+				// Ausgabe der Position:
+				System.out.print("Id " + docId + ", pos " + pos + ": ' ... ");
+				for (int i = start; i <= end; i++) {
+					System.out.print(tokens.get(i) + " ");
+				}
+				System.out.println(" ... '");
+			}
+		}
 	}
-
 }
