@@ -16,20 +16,21 @@ import java.util.TreeSet;
 public class InvertedIndex implements InformationRetrieval {
 
 	// der invertierte Index für die spätere Suche
-	private Map<String, SortedSet<Integer>> index = new HashMap<String, SortedSet<Integer>>();
+	private Map<String, SortedSet<Integer>> invIndex;
 	// eine Instanz des Preprocessors für Indexierung und Query-Verarbeitung
 	private static final Preprocessor PREPROCESSOR = new Preprocessor();
 
 	public InvertedIndex(Corpus corpus) {
 		long start = System.currentTimeMillis();
-		index = index(corpus);
+		invIndex = index(corpus);
 		System.out.println("Index erstellt, Dauer: "
 				+ (System.currentTimeMillis() - start) + " ms.");
 	}
 
 	private Map<String, SortedSet<Integer>> index(Corpus corpus) {
-		List<String> works = corpus.getWorks();
+		HashMap<String, SortedSet<Integer>> index = new HashMap<String, SortedSet<Integer>>();
 		// wir indexieren Werk für Werk:
+		List<String> works = corpus.getWorks();
 		for (int i = 0; i < works.size(); i++) {
 			List<String> terms = PREPROCESSOR.process(works.get(i));
 			for (String t : terms) {
@@ -65,7 +66,7 @@ public class InvertedIndex implements InformationRetrieval {
 		 */
 		List<SortedSet<Integer>> allPostings = new ArrayList<SortedSet<Integer>>();
 		for (String q : queries) {
-			SortedSet<Integer> postings = index.get(q);
+			SortedSet<Integer> postings = invIndex.get(q);
 			allPostings.add(postings);
 		}
 		/*

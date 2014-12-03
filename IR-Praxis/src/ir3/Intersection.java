@@ -4,12 +4,12 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class Intersection {
+/*
+ * Die Klasse Intersection bietet nur eine statische Methode 'of', die die
+ * Schnittmenge zweier Sets ermittelt (eben die 'intersection of').
+ */
 
-	/*
-	 * Die Klasse Intersection bietet nur eine statische Methode 'of', die die
-	 * Schnittmenge zweier Sets ermittelt (eben die 'intersection of').
-	 */
+public class Intersection {
 
 	/*
 	 * Implementierung der Listen-Intersection, die die Sortierung der Listen
