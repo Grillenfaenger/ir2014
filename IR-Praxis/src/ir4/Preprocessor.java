@@ -26,8 +26,6 @@ final class Preprocessor {
 
 	/*
 	 * Gibt eine Liste der Terme zurück
-	 * 
-	 * TODO: umbauen zum Tokenizer ...
 	 */
 	List<String> process(String text) {
 		/* Einheitliches lower-casing */
@@ -43,23 +41,6 @@ final class Preprocessor {
 		return new ArrayList<String>(result);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/*
 	 * Gibt eine Liste der Tokens zurück
 	 */
