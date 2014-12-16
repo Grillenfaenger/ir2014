@@ -30,10 +30,6 @@ public class LinearSearch implements InformationRetrieval {
 					if (token.compareTo(q) == 0) {
 						result.add(works.indexOf(work));
 						break;
-						/* Ein 'break' macht das ganze (unbedeutend) schneller,
-						 * zumindest wenn Term gleich zu Beginn des jew. Werks
-						 * gefunden wird.
-						 */
 					}
 				}
 			}
