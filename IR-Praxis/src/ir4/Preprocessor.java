@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * Einfacher Preprocessor: splittet und gibt sortierte Types zurück.
  */
 
-final class Preprocessor {
+public final class Preprocessor {
 
 	/*
 	 * Ein Unicode-wirksamer Ausdruck für "Nicht-Buchstabe", der auch Umlaute
@@ -20,14 +20,14 @@ final class Preprocessor {
 	private static final String ASCII_DELIMITER = "\\W";
 	private String delimiter;
 
-	Preprocessor() {
+	public Preprocessor() {
 		delimiter = UNICODE_AWARE_DELIMITER;
 	}
 
 	/*
 	 * Gibt eine Liste der Terme zurück
 	 */
-	List<String> process(String text) {
+	public List<String> process(String text) {
 		/* Einheitliches lower-casing */
 		text = text.toLowerCase();
 		SortedSet<String> result = new TreeSet<String>();
@@ -44,7 +44,7 @@ final class Preprocessor {
 	/*
 	 * Gibt eine Liste der Tokens zurück
 	 */
-	List<String> tokenize(String text) {
+	public List<String> tokenize(String text) {
 		/* Einheitliches lower-casing */
 		text = text.toLowerCase();
 		List<String> result = new ArrayList<String>();
