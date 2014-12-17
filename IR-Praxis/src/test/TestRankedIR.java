@@ -2,7 +2,7 @@ package test;
 
 import static org.junit.Assert.assertTrue;
 import ir5.Corpus;
-import ir3.InvertedIndex;
+import ir5.InvertedIndex;
 import ir5.Document;
 
 import java.util.ArrayList;
@@ -10,15 +10,18 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestRankedIR {
 
 	private Corpus corpus;
 	private String query;
+	// NEU: Da wir nur einen Indextyp verwenden, hier auch als Klassenvariable:
 	private InvertedIndex index;
+	// ... ebenso das Ergebnis, hier nun Document-Objekten statt nur docIds
 	private Set<Document> result;
+	// NEU: wir benutzen einen Ranker, um das Ergebnis zu bewerten:
+	private Ranker ranker;
 
 	@Before
 	public void setUp() throws Exception {
@@ -37,9 +40,12 @@ public class TestRankedIR {
 
 	@Test
 	public void resultRanked() {
-
-		
-		
+		result = index.search(query);
+		System.out.println(result.size() + " ungerankte Treffer für " + query);
+		assertTrue("Ergebnis sollte nicht leer sein!", result.size() > 0);
+		//Ergebnis ranken:
+		Set<Document> rankedResult = ranker.rank(result);
+		print(new ArrayList<Document>(rankedResult));
 	}
 
 	/*
