@@ -1,8 +1,9 @@
 package test;
 
 import static org.junit.Assert.assertTrue;
-import ir1.Corpus;
+import ir5.Corpus;
 import ir3.InvertedIndex;
+import ir5.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ public class TestRankedIR {
 	private Corpus corpus;
 	private String query;
 	private InvertedIndex index;
-	private Set<Integer> result;
+	private Set<Document> result;
 
 	@Before
 	public void setUp() throws Exception {
-		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n");
+		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
 		index = new InvertedIndex(corpus);
 		query = "brutus caesar";
 	}
@@ -31,21 +32,20 @@ public class TestRankedIR {
 		result = index.search(query);
 		System.out.println(result.size() + " ungerankte Treffer für " + query);
 		assertTrue("Ergebnis sollte nicht leer sein!", result.size() > 0);
-		print(new ArrayList(result));
+		print(new ArrayList<Document>(result));
 	}
 
-	@Ignore
 	@Test
 	public void resultRanked() {
-		/*
-		 * TODO: Und jetzt mit Ranking ...
-		 */
+
+		
+		
 	}
 
 	/*
 	 * Hilfsmethode, um Ergebnisse übersichtlicher darzustellen.
 	 */
-	public void print(List resultList) {
+	public void print(List<Document> resultList) {
 		System.out.println("-------------------------------");
 		for (Object document : resultList) {
 			System.out.println(document);
