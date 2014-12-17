@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import ir5.Corpus;
 import ir5.InvertedIndex;
 import ir5.Document;
+import ir5.Ranker;
 
 import java.util.ArrayList;
 import java.util.List;
