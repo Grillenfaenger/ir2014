@@ -34,7 +34,7 @@ public class InvertedIndex implements InformationRetrieval {
 		// NEU: 'Documents' statt Strings
 		List<Document> works = corpus.getWorks();
 		for (int i = 0; i < works.size(); i++) {
-			// NEU: Preprocessor wird schon im Document eingesetzt
+			// NEU: Preprocessor muss schon im Document eingesetzt werden
 			Set<String> terms = works.get(i).getTerms();
 			// der Rest bleibt wie bisher ...
 			for (String t : terms) {
