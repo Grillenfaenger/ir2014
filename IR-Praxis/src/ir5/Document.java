@@ -1,6 +1,6 @@
 package ir5;
 
-import java.util.Set;
+import java.util.List;
 
 public class Document {
 
@@ -8,7 +8,7 @@ public class Document {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Set<String> getTerms() {
+	public List<String> getTerms() {
 		// TODO Auto-generated method stub
 		return null;
 	}
