@@ -4,13 +4,12 @@ import java.util.List;
 
 public class VectorComparison {
 
-	public static Double compare(List<Double> v1, List<Double> v2) {
-
+	public static double compare(List<Double> v1, List<Double> v2) {
 		/*
 		 * TODO: Hier erfolgt die Berechnung der Cosinus-Ähnlichkeit auf
 		 * Grundlage von 'dot product' und euklidischer Länge (siehe Folien)
 		 */
-		return null;
+		return 0.0;
 	}
 
 	private static double dotProduct(List<Double> v1, List<Double> v2) {
