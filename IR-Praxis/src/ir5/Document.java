@@ -75,4 +75,10 @@ public class Document {
 		return docVector;
 	}
 
+	public Double similarity(Document doc, InvertedIndex index) {
+		// TODO Berechnung der Ähnlichkeit zu einem anderen Dokument (bzw. hier:
+		// zur query) auf Grundlage ihrer Vektor-Repräsentationen
+		return null;
+	}
+
 }
