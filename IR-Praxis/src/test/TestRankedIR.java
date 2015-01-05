@@ -42,11 +42,11 @@ public class TestRankedIR {
 	@Test
 	public void resultRanked() {
 		result = index.search(query);
-		System.out.println(result.size() + " ungerankte Treffer für " + query);
+		System.out.println(result.size() + " gerankte Treffer für " + query);
 		assertTrue("Ergebnis sollte nicht leer sein!", result.size() > 0);
 		//Ergebnis ranken:
-		Set<Document> rankedResult = ranker.rank(result);
-		print(new ArrayList<Document>(rankedResult));
+		List<Document> rankedResult = ranker.rank(result);
+		print(rankedResult);
 	}
 
 	/*
