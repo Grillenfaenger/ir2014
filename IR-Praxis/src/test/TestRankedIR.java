@@ -29,6 +29,11 @@ public class TestRankedIR {
 		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
 		index = new InvertedIndex(corpus);
 		query = "brutus caesar";
+		/*
+		 * Ranking erfolgt relativ zu einer Anfrage, deshalb initialisieren wir
+		 * den Ranker mit der query:
+		 */
+		ranker = new Ranker(query, index);
 	}
 
 	@Test
@@ -44,7 +49,7 @@ public class TestRankedIR {
 		result = index.search(query);
 		System.out.println(result.size() + " gerankte Treffer für " + query);
 		assertTrue("Ergebnis sollte nicht leer sein!", result.size() > 0);
-		//Ergebnis ranken:
+		// Ergebnis ranken:
 		List<Document> rankedResult = ranker.rank(result);
 		print(rankedResult);
 	}
