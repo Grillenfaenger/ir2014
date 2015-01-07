@@ -5,12 +5,19 @@ public class TermWeighting {
 	public static double tfIdf(String t, Document document, InvertedIndex index) {
 
 		/*
-		 * TODO: Umsetzung der tfIdf-Formeln aus dem Seminar (siehe Folien)
+		 * Umsetzung der tfIdf-Formeln aus dem Seminar (siehe Folien)
 		 */
+		double tf = document.getTf(t);
+		
+		double n = index.getWorks().size();
+		
+		double df = index.getDocFreq(t);
+		
+		double idf = Math.log(n/df);
 
+		double tfIdf = tf * idf;
 		
-		
-		return 0;
+		return tfIdf;
 	}
 
 	
