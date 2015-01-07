@@ -67,18 +67,35 @@ public class Document {
 		/* ...und der Vektor enthält für jeden Term im Vokabular... */
 		for (String t : terms) {
 			/*
-			 * ...den tfIdf-Wert des Terms (Berechnung in einer eigene Klasse):
+			 * ...den tfIdf-Wert des Terms (Berechnung in einer eigenen Klasse):
 			 */
-			tfIdfValue = TermWeighting.tfIdf(t, this, index);// TODO: errechnen!
+			tfIdfValue = TermWeighting.tfIdf(t, this, index);
 			docVector.add(tfIdfValue);
 		}
 		return docVector;
 	}
 
-	public Double similarity(Document doc, InvertedIndex index) {
-		// TODO Berechnung der Ähnlichkeit zu einem anderen Dokument (bzw. hier:
-		// zur query) auf Grundlage ihrer Vektor-Repräsentationen
-		return null;
+	/*
+	 * Die Cosinus-Ähnlichkeit dieses Documents zu einer query. Die eigentliche
+	 * Ähnlichkeitsberechnung delegieren wir an eine Vergleichstrategie,
+	 * implementiert in der Klasse VectorComparison.
+	 */
+	public Double similarity(Document query, InvertedIndex index) {
+
+		List<Double> queryVec = query.computeVector(index);
+		List<Double> docVector = this.computeVector(index);
+
+		double score = VectorComparison.compare(queryVec, docVector);
+
+		return score;
+	}
+
+	/*
+	 * Zugriff auf Tf-Werte (für Termgewichtung)
+	 */
+	public double getTf(String t) {
+		Integer integer = tf.get(t);
+		return integer == null ? 0 : integer;
 	}
 
 }
