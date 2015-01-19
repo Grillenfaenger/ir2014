@@ -57,7 +57,7 @@ public class Document {
 	/*
 	 * Gibt einen Vektor mit tfIdf-Werten zu diesem Document zurück.
 	 */
-	public List<Double> computeVector(InvertedIndex index) {
+	public List<Double> computeVector(InformationRetrieval index) {
 		Set<String> terms = index.getTerms();
 		/*
 		 * Ein Vektor für dieses Dokument ist eine Liste (Länge = Anzahl Terme)
@@ -80,7 +80,7 @@ public class Document {
 	 * Ähnlichkeitsberechnung delegieren wir an eine Vergleichstrategie,
 	 * implementiert in der Klasse VectorComparison.
 	 */
-	public Double similarity(Document query, InvertedIndex index) {
+	public Double similarity(Document query, InformationRetrieval index) {
 
 		List<Double> queryVec = query.computeVector(index);
 		List<Double> docVector = this.computeVector(index);

@@ -88,7 +88,7 @@ public class InvertedIndex implements InformationRetrieval {
 	/*
 	 *  Alle Dokumente.
 	 */
-	List<Document> getWorks() {
+	public List<Document> getWorks() {
 		return corpus.getWorks();
 	}
 
@@ -111,7 +111,7 @@ public class InvertedIndex implements InformationRetrieval {
 	/*
 	 *  Die Dokumentenfrequenz zu einem Term:
 	 */
-	public double getDocFreq(String t) {
+	public Integer getDocFreq(String t) {
 		return index.get(t).size();
 	}
 

@@ -1,5 +1,6 @@
 package ir5;
 
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -13,5 +14,14 @@ public interface InformationRetrieval {
 
 	// NEU: Rückgabe von Documents (statt docIds)
 	Set<Document> search(String query);
+	/*
+	 * Neu: Ergänzungen, damit bei der Termgewichtung generisch mit dem
+	 * Interface gearbeitet werden kann:
+	 */
+	Set<String> getTerms();
+
+	List<Document> getWorks();
+
+	Integer getDocFreq(String t);
 
 }

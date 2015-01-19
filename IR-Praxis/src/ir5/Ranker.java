@@ -15,9 +15,9 @@ public class Ranker {
 	 * Cosinus-Ähnlichkeit jedes Documents des result-Sets zu ermitteln.
 	 */
 	private Document query;
-	private InvertedIndex index;
+	private InformationRetrieval index;
 
-	public Ranker(String query, InvertedIndex index) {
+	public Ranker(String query, InformationRetrieval index) {
 		// hier wird aus der query ein kleines Document erzeugt (text = query,
 		// title = "Query")
 		this.query = new Document(query, "Query");
