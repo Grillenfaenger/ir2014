@@ -85,9 +85,7 @@ public class Document {
 		List<Double> queryVec = query.computeVector(index);
 		List<Double> docVector = this.computeVector(index);
 
-		double score = VectorComparison.compare(queryVec, docVector);
-
-		return score;
+		return VectorComparison.compare(queryVec, docVector);
 	}
 
 	/*
@@ -96,6 +94,13 @@ public class Document {
 	public double getTf(String t) {
 		Integer integer = tf.get(t);
 		return integer == null ? 0 : integer;
+	}
+
+	/*
+	 * Zugriff auf Titel (für Erstellung eines Dummy-GoldStandard)
+	 */
+	public String getTitle() {
+		return title;
 	}
 
 }
