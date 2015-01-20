@@ -35,12 +35,14 @@ public class TestEval {
 
 	@BeforeClass
 	public static void setup() {
+		
 		/* Zunächst muss alles initialisiert werden */
+		
+		query = "king";
+
 		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
 		index = new InvertedIndex(corpus);
 		ranker = new Ranker(query, index);
-		
-		query = "king";
 
 		/* ... dann holen wir uns die Suchergebnisse ... */
 		Set<Document> result = index.search(query);
@@ -73,6 +75,7 @@ public class TestEval {
 	@Test
 	public void evalUnranked() {
 		/* TODO: Wir evaluieren zunächst alle Ergebnisse gegen den Goldstandard. */
+		System.out.println();
 	}
 
 		/* TODO: Und nun mit Ranking - was müsssen wir beachten? */
