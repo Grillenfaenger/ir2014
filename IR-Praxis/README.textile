@@ -11,4 +11,5 @@ table(#tableborders){ border: 2px solid #ccc; border-collapse: collapse; border-
 | "ir4":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir4 | Positional Index, PositionalIntersect | | IIR Kap. 2.4 |
 | "ir5":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir5 | Ranked Retrieval: Termgewichtung, Vector Space Model | | IIR Kap. 6 + 7 |
 | "ir6":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir6 | Evaluation: Precision, Recall, F-Maß | | IIR Kap. 8 |
+| "ir7":https://github.com/claesn/ir2014/tree/master/IR-Praxis/src/ir7 | Lucene: Indexer und Searcher | "Lucene.zip":http://lucene.apache.org/core/mirrors-core-latest-redir.html? | "Lucene in Action":http://www.manning.com/hatcher3/ |
 
