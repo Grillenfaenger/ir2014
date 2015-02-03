@@ -24,8 +24,9 @@ import org.apache.lucene.util.Version;
 
 public class Indexer {
 
-	// das Herzstück der Lucene-Indexierung ist der sog. IndexWriter.
+	// das Herzstück der Lucene-Indexierung ist der sog. IndexWriter:
 	private IndexWriter writer;
+	private int numDocs;
 
 	public Indexer(String indexDir) throws IOException {
 		/* Das Verzeichnis, in dem der Index gespeichert wird: */
@@ -39,9 +40,9 @@ public class Indexer {
 	}
 
 	/*
-	 * Wenn unser Korpus bereits aus Lucene-Documents besteht, sind die Schritte
-	 * A.1 ("acquire content") und A.2 ("build document") bereits abgehakt und
-	 * die Dokumente können hier ganz einfach zum Index hinzugefügt werden:
+	 * Wenn unser Korpus aus Lucene-Documents besteht, sind die Schritte A.1
+	 * ("acquire content") und A.2 ("build document") bereits abgehakt und die
+	 * Dokumente können hier ganz einfach zum Index hinzugefügt werden:
 	 */
 	public void index(Corpus corpus) throws IOException {
 		writer.deleteAll();
@@ -54,14 +55,14 @@ public class Indexer {
 			writer.addDocument(work);
 			System.out.print(".");
 		}
-		System.out.println(writer.numDocs()
-				+ " Dokumente zum Index hinzugefügt.");
+		numDocs = writer.numDocs();
+		System.out.println(" " + numDocs + " Dokumente hinzugefügt.");
 		writer.close();
 	}
 
 	/*
 	 * Falls nicht, dann müssen wir die Documents hier zunächst noch selbst
-	 * erstellen (A.1 - "acquire content" sowie A.2 - 'build document') und dann
+	 * erstellen (A.1 - "acquire data" sowie A.2 - 'build document') und dann
 	 * jeweils einzeln zum Index hinzufügen. Das ist im Grunde der allgemeinere
 	 * Fall: Lesen von Textdateien mittels eines einfachen Verzeichnis-Crawlers.
 	 */
@@ -69,32 +70,35 @@ public class Indexer {
 		writer.deleteAll();
 		/* Schritt A.1: Acquire data (Dateien einlesen) */
 		File[] files = new File(data).listFiles();
-		for (int i = 0; i < files.length; i++) {
-			File f = files[i];
-			if (f.isDirectory()) {
-				index(f.getAbsolutePath());// rekursiv in Unterverzeichnisse
+		if (files == null) {
+			System.out.println(" - Verzeichnis nicht gefunden!");
+		} else {
+			for (int i = 0; i < files.length; i++) {
+				File f = files[i];
+				if (f.isDirectory()) {
+					index(f.getAbsolutePath());// rekursiv in Unterverzeichnisse
+				}
+				if (f.getName().endsWith(".txt") && f.exists()) {// nur *.txt
+					/* Schritt A.2: build document */
+					Document doc = buildLuceneDocument(f);
+					/* Schritte A.3 + A.4: analyze + index document */
+					writer.addDocument(doc);
+					System.out.print(".");
+				}
 			}
-			if (f.getName().endsWith(".txt") && f.exists()) {// nur .txt-Dateien
-				/* Schritt A.2: build document (s. Corpus.buildLuceneDoc()) */
-				Document doc = buildLuceneDocument(f);
-				/* Schritte A.3 + A.4: Analyze + index document */
-				writer.addDocument(doc);
-				System.out.print(".");
-			}
+			numDocs = writer.numDocs();
+			System.out.println(" " + numDocs + " Dokumente hinzugefügt.");
+			writer.close();
 		}
-		System.out.println(writer.numDocs()
-				+ " Dokumente zum Index hinzugefügt.");
-		writer.close();
 	}
 
 	/*
-	 * Schritt A.2: build document: Document ist ein Container für 'Fields',
-	 * welche die eigentlichen Daten kapseln. Strukturell ähnelt ein Field einer
-	 * Map<Key, Value>, d.h. auf einen Key (ID) wird ein Value (textuelle Daten)
-	 * abgebildet.
+	 * Schritt A.2: 'build document' - Die Klasse Document ist ein Container für
+	 * sog. 'Fields', welche die eigentlichen Daten kapseln. Strukturell ähnelt
+	 * ein Field einer Map<Key, Value>, d.h. auf einen Key (ID) wird ein Value
+	 * (textuelle Daten) abgebildet.
 	 */
 	private Document buildLuceneDocument(File f) throws Exception {
-
 		String work = readFile(f);
 		/*
 		 * Den Dateiinhalt zunächst auszulesen ermöglicht ein eigenes Parsing,
@@ -120,12 +124,13 @@ public class Indexer {
 		/* Noch ein Beispiel: Zeitpunkt der Indexierung: */
 		doc.add(new StringField("indexDate", DateTools.dateToString(new Date(),
 				DateTools.Resolution.MINUTE), Field.Store.YES));
-
+		/* ... und der Dateiname: */
+		doc.add(new StringField("filename", f.getCanonicalPath(), Store.YES));
 		return doc;
 	}
 
 	/*
-	 * Hilfsmethode, schreibt einfach den Inhalt von f auf einen String.
+	 * Hilfsmethode, liest den Inhalt von f auf einen String.
 	 */
 	private String readFile(File f) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(f));
@@ -139,4 +144,14 @@ public class Indexer {
 		return sb.toString();
 	}
 
+	/*
+	 * Hilfsmethode für unsere Tests.
+	 */
+	public int getNumDocs() {
+		return numDocs;
+	}
+
+	public void close() throws IOException {
+		writer.close();// nicht vergessen ...
+	}
 }

@@ -8,24 +8,27 @@ import java.util.List;
 import org.apache.lucene.document.Document;
 
 public class CorpusSplitter {
+
 	/*
-	 * Hilfsklasse: Teilt das Shakespeare-Korpus in Einzeldateien ein. Die
-	 * Dateinamen setzen sich zusammen aus docId (Index der Liste von Werken)
-	 * und Titel (erste Zeile des jew. Werks).
+	 * Teilt das Shakespeare-Korpus in Einzeldateien. Dateinamen setzen sich
+	 * zusammen aus docId (Index der Werk-Liste) und Titel (jew. erste Zeile).
 	 */
-	private static String data;
+	private static String outDir; // Zielverzeichnis
+
+	public static void main(String[] args) {
+		outDir = "shakespeare/";
+		split(new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n"), outDir);
+	}
 
 	public static void split(Corpus corpus, String targetDir) {
-
-		data = targetDir;
-		File dir = new File(data);
+		outDir = targetDir;
+		File dir = new File(outDir);
 		if (dir.mkdirs()) {
-			System.out.println("New Dir: " + dir.getAbsolutePath());
+			System.out.println("Neues Verzeichnis: " + dir.getAbsolutePath());
 			split(corpus);
 		} else {
-			System.out.println("Dir '" + dir.getAbsolutePath()
-					+ "' already exists! (" + dir.listFiles().length
-					+ " files).");
+			System.out.println("Verzeichnis '" + dir.getAbsolutePath()
+					+ "' vorhanden, (" + dir.listFiles().length + " Dateien).");
 		}
 	}
 
@@ -36,19 +39,18 @@ public class CorpusSplitter {
 			String text = work.get("text");
 			int docId = worksAsList.indexOf(work) + 1;// erstes 'Werk' entfernt
 			String filename = docId + "-" + title + ".txt";
-			System.out.println("Creating file: " + filename);
-			writeFile(text, filename);
+			System.out.println("Neue Datei: " + filename);
+			createFile(text, filename);
 		}
 	}
 
-	private static void writeFile(String work, String filename) {
+	private static void createFile(String work, String filename) {
 		try {
-			FileWriter fw = new FileWriter(new File(data + filename));
+			FileWriter fw = new FileWriter(new File(outDir + filename));
 			fw.write(work);
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

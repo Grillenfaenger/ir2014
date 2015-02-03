@@ -1,57 +1,80 @@
 package test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import ir7.Corpus;
 import ir7.CorpusSplitter;
 import ir7.Indexer;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class LuceneTest {
 
-	private Corpus corpus;
-	private String luceneDir;
-	private String query;
-	private String dataDir;
+	private static Corpus corpus;
+	private static String dataDir;
+	private static String luceneDir;
+	private static String query;
+
+	@BeforeClass
+	public static void setUp() throws Exception {
+
+		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
+		/*
+		 * Verzeichnis mit Beispieltexten
+		 */
+		dataDir = "shakespeare/";
+		/*
+		 * Der CorpusSplitter prüft das betreffende Verzeichnis (dataDir) und
+		 * zerlegt das Corpus ggf. in Einzeldateien, benannt nach docId+Titel
+		 */
+		CorpusSplitter.split(corpus, dataDir);
+		/*
+		 * Speicherort für den Lucene-Index:
+		 */
+		luceneDir = "index/";
+		query = "king";
+	}
 
 	@Before
-	public void setUp() throws Exception {
-		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
-		luceneDir = "index/"; // Speicherort für den Lucene-Index
-		dataDir = "shakespeare/"; // Verzeichnis mit zu indexierenden Dateien
-		query = "brutus";
+	public void printSkip() {
+		System.out.println();
 	}
 
 	@Test
 	public void testCorpusIndexing() throws IOException {
 		/*
-		 * Ein Lucene-Indexer für unser Corpus.
+		 * Erstellt einen Lucene-Index für unser Corpus. Wir prüfen zunächst, ob
+		 * mit dem Korpus alles in Ordnung ist ...
 		 */
-		assertTrue("Corpus sollte mehr als ein Doc enthalten", corpus
-				.getWorks().size() > 0);
-		System.out.println("Indexing corpus ");
+		assertEquals("Corpus sollte genau 38 Dokumente enthalten", 38, corpus
+				.getWorks().size());
+		/* ... und erstellen uns dann einen Indexer: */
+		System.out.print("Indexing corpus ");
 		Indexer indexer = new Indexer(luceneDir);
 		indexer.index(corpus);
+		indexer.close();
+		/* Wenn alles OK ist, sollten nun genau die 38 Docs im Index sein: */
+		assertEquals("Index sollte der Korpusgröße entsprechen", corpus
+				.getWorks().size(), indexer.getNumDocs());
 	}
 
 	@Test
 	public void testIndexer() throws Exception {
 		/*
 		 * Ein Lucene-Indexer, der zunächst Dateien aus einem Verzeichnis
-		 * einliest. Um sicherzustellen, dass tatsächlich die einzelnen
-		 * Shakespeare-Texte vorhanden sind, wird hier die Hilfsklasse
-		 * CorpusSplitter eingesetzt, die das betreffende Verzeichnis prüft und
-		 * ggf. das Corpus in Einzeldateien zerlegt.
+		 * ('dataDir') einliest. Um sicherzustellen, dass tatsächlich die
+		 * einzelnen Shakespeare-Texte in 'dataDir' liegen, wird in setUp() der
+		 * CorpusSplitter ausgeführt.
 		 */
-		CorpusSplitter.split(corpus, dataDir);
-		System.out.println("Indexing files in dir "
-				+ (new File(dataDir).getAbsolutePath()));
+		System.out.print("Indexing files ");
 		Indexer indexer = new Indexer(luceneDir);
 		indexer.index(dataDir);
+		indexer.close();
+		assertEquals("Index sollte genau 38 Dokumente enthalten", 38,
+				indexer.getNumDocs());
 	}
 
 	@Test
