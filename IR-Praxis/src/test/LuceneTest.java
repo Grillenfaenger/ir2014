@@ -1,12 +1,15 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import ir7.Corpus;
 import ir7.CorpusSplitter;
 import ir7.Indexer;
+import ir7.Searcher;
 
 import java.io.IOException;
 
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,7 +26,7 @@ public class LuceneTest {
 
 		corpus = new Corpus("pg100.txt", "1[56][0-9]{2}\n", "\n");
 		/*
-		 * Verzeichnis mit Beispieltexten
+		 * Verzeichnis mit Beispieltexten:
 		 */
 		dataDir = "shakespeare/";
 		/*
@@ -35,7 +38,7 @@ public class LuceneTest {
 		 * Speicherort für den Lucene-Index:
 		 */
 		luceneDir = "index/";
-		query = "king";
+		query = "title:\"part henry\"~5";
 	}
 
 	@Before
@@ -78,11 +81,17 @@ public class LuceneTest {
 	}
 
 	@Test
-	public void testSearcher() {
+	public void testSearcher() throws IOException, ParseException {
 		/*
-		 * TODO: Der Searcher ist das Gegenstück zum Indexer. Machen wir beim
-		 * nächsten Mal.
+		 * Der Searcher ist das Gegenstück zum Indexer. Die Searcher-Klasse
+		 * enthält einen IndexSearcher, der auf den oben erstellten (bzw. einen
+		 * beliebigen) Index im entsprechenden Verzeichnis angesetzt wird:
 		 */
-		System.out.println("TODO: search for " + query);
+		System.out.println("Search for " + query);
+		Searcher searcher = new Searcher(luceneDir);
+		searcher.search(query);
+		searcher.close();
+		assertTrue("Das Suchergebnis sollte nicht leer sein.",
+				searcher.totalHits() > 0);
 	}
 }
