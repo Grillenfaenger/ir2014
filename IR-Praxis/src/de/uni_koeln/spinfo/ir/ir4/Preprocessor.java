@@ -1,4 +1,4 @@
-package ir3;
+package de.uni_koeln.spinfo.ir.ir4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * Einfacher Preprocessor: splittet und gibt sortierte Types zurück.
  */
 
-final class Preprocessor {
+public final class Preprocessor {
 
 	/*
 	 * Ein Unicode-wirksamer Ausdruck für "Nicht-Buchstabe", der auch Umlaute
@@ -20,11 +20,14 @@ final class Preprocessor {
 	private static final String ASCII_DELIMITER = "\\W";
 	private String delimiter;
 
-	Preprocessor() {
+	public Preprocessor() {
 		delimiter = UNICODE_AWARE_DELIMITER;
 	}
 
-	List<String> process(String text) {
+	/*
+	 * Gibt eine Liste der Terme zurück
+	 */
+	public List<String> process(String text) {
 		/* Einheitliches lower-casing */
 		text = text.toLowerCase();
 		SortedSet<String> result = new TreeSet<String>();
@@ -36,6 +39,23 @@ final class Preprocessor {
 			}
 		}
 		return new ArrayList<String>(result);
+	}
+
+	/*
+	 * Gibt eine Liste der Tokens zurück
+	 */
+	public List<String> tokenize(String text) {
+		/* Einheitliches lower-casing */
+		text = text.toLowerCase();
+		List<String> result = new ArrayList<String>();
+		/* splitten, leere Strings filtern: */
+		List<String> list = Arrays.asList(text.split(delimiter));
+		for (String s : list) {
+			if (s.trim().length() > 0) {
+				result.add(s.trim());
+			}
+		}
+		return result;
 	}
 
 }

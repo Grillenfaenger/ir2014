@@ -1,4 +1,4 @@
-package ir1;
+package de.uni_koeln.spinfo.ir.ir1;
 
 import java.io.File;
 import java.io.FileNotFoundException;

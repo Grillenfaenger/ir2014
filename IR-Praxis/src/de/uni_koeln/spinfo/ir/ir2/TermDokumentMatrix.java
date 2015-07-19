@@ -1,4 +1,4 @@
-package ir2;
+package de.uni_koeln.spinfo.ir.ir2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 import javax.swing.JTable.PrintMode;
 
-import ir1.Corpus;
+import de.uni_koeln.spinfo.ir.ir1.Corpus;
 
 public class TermDokumentMatrix implements InformationRetrieval {
 

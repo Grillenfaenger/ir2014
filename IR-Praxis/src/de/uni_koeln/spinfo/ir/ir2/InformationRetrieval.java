@@ -1,4 +1,4 @@
-package ir2;
+package de.uni_koeln.spinfo.ir.ir2;
 
 import java.util.Set;
 

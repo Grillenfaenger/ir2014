@@ -1,11 +1,11 @@
-package ir2;
-
-import ir1.Corpus;
+package de.uni_koeln.spinfo.ir.ir2;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import de.uni_koeln.spinfo.ir.ir1.Corpus;
 
 public class LinearSearch implements InformationRetrieval {
 
@@ -30,10 +30,6 @@ public class LinearSearch implements InformationRetrieval {
 					if (token.compareTo(q) == 0) {
 						result.add(works.indexOf(work));
 						break;
-						/* Ein 'break' macht das ganze (unbedeutend) schneller,
-						 * zumindest wenn Term gleich zu Beginn des jew. Werks
-						 * gefunden wird.
-						 */
 					}
 				}
 			}
